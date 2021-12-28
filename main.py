@@ -42,6 +42,7 @@ def get_meet():
   url = enter_meet()
   driver.get(str(url))
 
+#RUNS FUNCTION TO OPEN WEBDRIVER TO MEET 
 get_meet() 
 
 #########################################
@@ -62,6 +63,10 @@ def navigate_to_results():
   results_url = create_results_url()
   driver.get(str(results_url))
 
+#########################################
+#########################################
+
+# RUNS FUNCTION TO GO TO RESULTS
 navigate_to_results()
 
 #########################################
@@ -72,31 +77,49 @@ def find_results_table():
   results_table_element = driver.find_element(By.CLASS_NAME, 'meetResultsList')
   print(results_table_element.get_attribute('class'))
 
+#########################################
+#########################################
+
+# RUNS FUNCTION TO FIND THE TABLE
 find_results_table()
 
 #########################################
 #########################################
 
+# GIVES A REST TIME BETWEEN FUNCTION CALLS
 time.sleep(3)
 
+#########################################
+#########################################
+
+# DEFINE FUNCTION THAT FINDS AND CLICKS INTO EACH LINK
 def find_individual_results_links():
-  # individual_results_list = driver.find_elements(By.XPATH, "//table[contains(@class,'meetResultsList')]/tbody/tr/td/a]")
   individual_results_list = driver.find_elements(By.XPATH, "//table[@class='meetResultsList']/tbody/tr/td/a")
+  return individual_results_list
+  # for i in individual_results_list:
+  #   driver.implicitly_wait(10)
+  #   print(i.get_attribute('href'))
+
+
+#########################################
+#########################################
+
+# CLICKS INTO EACH INDIVIDUAL MEET RESULT
+def click_individual_results_list():
+  time.sleep(3)
+  individual_results_list = find_individual_results_links()
   for i in individual_results_list:
     driver.implicitly_wait(10)
     print(i.get_attribute('href'))
-
-find_individual_results_links()
-
-#########################################
-#########################################
-
-
-
+    # call function that contains create new window, get href of meet, scrape the data, revert to previous tab
+    # calls function that removes new window when scraping action is completed
+    
 
 #########################################
 #########################################
 
+# RUNS FUNCTION THAT FINDS EACH LINK AND IMPLEMENTS CLICK
+click_individual_results_list()
 
 #########################################
 #########################################
