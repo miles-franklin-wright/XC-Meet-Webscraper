@@ -100,12 +100,36 @@ def find_individual_results_links():
   #   driver.implicitly_wait(10)
   #   print(i.get_attribute('href'))
 
+#########################################
+#########################################
+
+# OPENS NEW TAB FOR SCRAPING
+def open_new_tab():
+  driver.execute_script("window.open('');")
+
+#########################################
+#########################################
+
+# NAVIGATES TO NEW TAB 
+
+#########################################
+#########################################
+
+
+
+#########################################
+#########################################
+
+# PRIMARY SCRAPING FUNCTION
+def scrape():
+  time.sleep(10)
+  print('RACE SCRAPED')
 
 #########################################
 #########################################
 
 # CLICKS INTO EACH INDIVIDUAL MEET RESULT
-def click_individual_results_list():
+def cycle_individual_results_list():
   time.sleep(3)
   individual_results_list = find_individual_results_links()
   for i in individual_results_list:
@@ -118,8 +142,9 @@ def click_individual_results_list():
 #########################################
 #########################################
 
-# RUNS FUNCTION THAT FINDS EACH LINK AND IMPLEMENTS CLICK
-click_individual_results_list()
+
+# RUNS FUNCTION THAT CYCLES THROUGH EACH INDIVIDUAL RACE
+cycle_individual_results_list()
 
 #########################################
 #########################################
