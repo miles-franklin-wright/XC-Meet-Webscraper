@@ -111,6 +111,32 @@ def open_new_tab():
 #########################################
 
 # NAVIGATES TO NEW TAB 
+def navigate_new_tab():
+  driver.switch_to.window(driver.window_handles[1])
+
+#########################################
+#########################################
+
+# LOADS RACE URL INTO NEW WINDOW
+def load_race_url(race):
+  driver.get(str(race))
+
+#########################################
+#########################################
+
+# CLOSES INDIVIDUAL RACE URL
+def close_race_url():
+  driver.close()
+
+#########################################
+#########################################
+
+
+# SWITCHES TO OLD (RESULT PAGE) URL
+def navigate_results_page_return():
+  driver.switch_to.window(driver.window_handles[0])
+
+
 
 #########################################
 #########################################
