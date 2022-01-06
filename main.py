@@ -102,9 +102,7 @@ time.sleep(3)
 def find_individual_results_links():
   individual_results_list = driver.find_elements(By.XPATH, "//table[@class='meetResultsList']/tbody/tr/td/a")
   return individual_results_list
-  # for i in individual_results_list:
-  #   driver.implicitly_wait(10)
-  #   print(i.get_attribute('href'))
+ 
 
 #########################################
 #########################################
@@ -128,17 +126,90 @@ def load_race_url(race):
   race = race
   driver.get(str(race))
 
+
+
+
+
+#########################################
+#########################################
+# start main scraper functions
+#########################################
+#########################################
+
+def scrape_meet_name():
+  meet_name = driver.find_element(By.CLASS_NAME, 'meetName')
+  print(meet_name.text)
+  return meet_name.text
+
+#########################################
+#########################################
+
+def scrape_meet_date():
+  meet_date = driver.find_element(By.XPATH, "//div[@class='date']/time")
+  print(meet_date.text)
+  return meet_date
+
+#########################################
+#########################################
+
+def scrape_meet_location():
+  meet_location = driver.find_element(By.XPATH, "//div[@class='venueName']/a")
+  print(meet_location.text)
+  return meet_location
+
+#########################################
+#########################################
+
+
+
+
+
+#########################################
+#########################################
+
+
+
+
+#########################################
+#########################################
+
+
+
+
+
+
+#########################################
+#########################################
+
+
+
+
+
+
+
+
+
+#########################################
+#########################################
+# end main scraper functions 
 #########################################
 #########################################
 
 # PRIMARY SCRAPING FUNCTION
 def scrape():
+  time.sleep(3)
+  scrape_meet_name()
+  time.sleep(3)
+  scrape_meet_date()
+  time.sleep(3)
+  scrape_meet_location()
   time.sleep(2)
   print('RACE SCRAPED')
   time.sleep(10)
   close_race_url()
   time.sleep(5)
   navigate_results_page_return()
+
 #########################################
 #########################################
 
@@ -158,19 +229,22 @@ def navigate_results_page_return():
 #########################################
 #########################################
 
+# ##### OLD; BUT MAY REIMPLEMENT. WE'LL SEE
+
+
 # RUNS THE CYCLE OF OPENING, SCRAPING, AND NAVIGATING BACK TO THE ORIGINAL PLACE
-def race_cycle(race):
-  race = race
-  time.sleep(2)
-  open_new_tab()
-  time.sleep(2)
-  navigate_new_tab()
-  time.sleep(2)
-  load_race_url(race)
-  time.sleep(8)
-  scrape()
-  time.sleep(2)
-  navigate_results_page_return()
+# def race_cycle(race):
+#   race = race
+#   time.sleep(2)
+#   open_new_tab()
+#   time.sleep(2)
+#   navigate_new_tab()
+#   time.sleep(2)
+#   load_race_url(race)
+#   time.sleep(8)
+#   scrape()
+#   time.sleep(2)
+#   navigate_results_page_return()
 
 #########################################
 #########################################
