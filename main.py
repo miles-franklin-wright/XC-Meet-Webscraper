@@ -20,7 +20,10 @@ chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-hsm-usage')
 
+########################################
+########################################
 
+# CREATES WEBDRIVER
 driver = webdriver.Chrome(options=chrome_options)
 
 ########################################
@@ -41,6 +44,9 @@ def enter_meet():
 def get_meet():
   url = enter_meet()
   driver.get(str(url))
+
+#########################################
+#########################################
 
 #RUNS FUNCTION TO OPEN WEBDRIVER TO MEET 
 get_meet() 
@@ -119,8 +125,20 @@ def navigate_new_tab():
 
 # LOADS RACE URL INTO NEW WINDOW
 def load_race_url(race):
+  race = race
   driver.get(str(race))
 
+#########################################
+#########################################
+
+# PRIMARY SCRAPING FUNCTION
+def scrape():
+  time.sleep(2)
+  print('RACE SCRAPED')
+  time.sleep(10)
+  close_race_url()
+  time.sleep(5)
+  navigate_results_page_return()
 #########################################
 #########################################
 
@@ -137,19 +155,22 @@ def navigate_results_page_return():
   driver.switch_to.window(driver.window_handles[0])
 
 
-
 #########################################
 #########################################
 
-
-
-#########################################
-#########################################
-
-# PRIMARY SCRAPING FUNCTION
-def scrape():
-  time.sleep(10)
-  print('RACE SCRAPED')
+# RUNS THE CYCLE OF OPENING, SCRAPING, AND NAVIGATING BACK TO THE ORIGINAL PLACE
+def race_cycle(race):
+  race = race
+  time.sleep(2)
+  open_new_tab()
+  time.sleep(2)
+  navigate_new_tab()
+  time.sleep(2)
+  load_race_url(race)
+  time.sleep(8)
+  scrape()
+  time.sleep(2)
+  navigate_results_page_return()
 
 #########################################
 #########################################
@@ -161,16 +182,24 @@ def cycle_individual_results_list():
   for i in individual_results_list:
     driver.implicitly_wait(10)
     print(i.get_attribute('href'))
-    # call function that contains create new window, get href of meet, scrape the data, revert to previous tab
-    # calls function that removes new window when scraping action is completed
+    race = str(i.get_attribute('href'))
+    time.sleep(2)
+    open_new_tab()
+    time.sleep(2)
+    navigate_new_tab()
+    time.sleep(2)
+    load_race_url(race)
+    time.sleep(8)
+    scrape()
+    time.sleep(8)
+    print('cycle completed')
     
-
-#########################################
-#########################################
-
-
-# RUNS FUNCTION THAT CYCLES THROUGH EACH INDIVIDUAL RACE
 cycle_individual_results_list()
+
+#########################################
+#########################################
+
+driver.close()
 
 #########################################
 #########################################
