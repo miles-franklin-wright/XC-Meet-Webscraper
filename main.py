@@ -35,7 +35,7 @@ def enter_meet():
   url = input()
   print(url)
   return url
-  # driver.get(str(url))
+
 
 #########################################
 #########################################
@@ -48,11 +48,6 @@ def get_meet():
 #########################################
 #########################################
 
-#RUNS FUNCTION TO OPEN WEBDRIVER TO MEET 
-get_meet() 
-
-#########################################
-#########################################
 
 # CREATE RESULTS HREF TAG
 def create_results_url():
@@ -69,11 +64,7 @@ def navigate_to_results():
   results_url = create_results_url()
   driver.get(str(results_url))
 
-#########################################
-#########################################
 
-# RUNS FUNCTION TO GO TO RESULTS
-navigate_to_results()
 
 #########################################
 #########################################
@@ -83,17 +74,6 @@ def find_results_table():
   results_table_element = driver.find_element(By.CLASS_NAME, 'meetResultsList')
   print(results_table_element.get_attribute('class'))
 
-#########################################
-#########################################
-
-# RUNS FUNCTION TO FIND THE TABLE
-find_results_table()
-
-#########################################
-#########################################
-
-# GIVES A REST TIME BETWEEN FUNCTION CALLS
-time.sleep(3)
 
 #########################################
 #########################################
@@ -128,11 +108,9 @@ def load_race_url(race):
 
 
 
-
-
 #########################################
 #########################################
-# start main scraper functions
+# begin scraper component functions
 #########################################
 #########################################
 
@@ -160,55 +138,157 @@ def scrape_meet_location():
 #########################################
 #########################################
 
-
-
-
-
-#########################################
-#########################################
-
-
+def scrape_race_length_gender():
+  combined_race_lenth_gender = driver.find_element(By.XPATH, "//div[@id='resultsList']/table/thead/tr/th/a")
+  print(combined_race_lenth_gender.text)
+  return combined_race_lenth_gender
 
 
 #########################################
 #########################################
 
+def scrape_athlete_and_school():
+  combined_athlete_school = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td/a")
+  for athlete in combined_athlete_school:
+    time.sleep(0.2)
+    print(athlete.text)
+  return combined_athlete_school
 
 
+#########################################
+#########################################
 
+def scrape_athlete_time():
+  athlete_times = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td/span")
+  for athlete in athlete_times:
+    time.sleep(0.2)
+    print(athlete.text)
+  return athlete_times
+
+#########################################
+#########################################
+
+def scrape_td_elements():
+  raw_results = []
+  td_elements = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td")
+  for td in td_elements:
+    time.sleep(0.5)
+    raw_results.append(td.get_attribute('data-text'))
+    raw_results.append(td.text)
+  return raw_results
 
 
 #########################################
 #########################################
 
-
-
-
-
-
-
-
-
-#########################################
-#########################################
-# end main scraper functions 
-#########################################
-#########################################
-
-# PRIMARY SCRAPING FUNCTION
-def scrape():
+def scrape_header():
   time.sleep(3)
   scrape_meet_name()
   time.sleep(3)
   scrape_meet_date()
   time.sleep(3)
   scrape_meet_location()
+  time.sleep(3)
+  scrape_race_length_gender()
+  time.sleep(3)
+
+
+
+#########################################
+#########################################
+# end main scraper component functions
+#########################################
+#########################################
+
+
+#########################################
+#########################################
+# begin cleaning component functions
+#########################################
+#########################################
+
+
+def select_raw_list(raw_results):
+  raw_results = raw_results
+  print(raw_results[1])
+  print('list selected')
+  raw_list = raw_results[1]
+  return raw_list
+
+
+
+
+#########################################
+#########################################
+
+
+def remove_nones_and_empties(raw_list):
+  raw_list = raw_list
+  for i in raw_list:
+    time.sleep(.2)
+    if i == "":
+      raw_list.remove(i)
+      print('blank found')
+    elif i == "None":
+      raw_list.remove(i)
+      print('None found')
+    else:
+      print('its chill')
+  print()
+
+
+#########################################
+#########################################
+
+
+
+
+
+
+#########################################
+#########################################
+# end cleaning component functions
+#########################################
+#########################################
+
+
+#########################################
+#########################################
+
+# PRIMARY CLEANING FUNCTION
+def clean(raw_results):
+  raw_results = raw_results
+  time.sleep(.5)
+  raw_list = select_raw_list(raw_results)
+  time.sleep(.5)
+  cleaned_list = remove_nones_and_empties(raw_list)
+  print(cleaned_list)
+  print('done cleaning for now')
+
+
+
+#########################################
+#########################################
+
+
+# PRIMARY SCRAPING FUNCTION
+def scrape():
+  raw_results = []
+  raw_results.append(scrape_header())
+  time.sleep(5)
+  raw_results.append(scrape_td_elements())
+  time.sleep(2)
+  print(raw_results)
   time.sleep(2)
   print('RACE SCRAPED')
+  time.sleep(2)
+  clean(raw_results)
   time.sleep(10)
   close_race_url()
   time.sleep(5)
   navigate_results_page_return()
+  time.sleep(5)
+  return raw_results
 
 #########################################
 #########################################
@@ -226,25 +306,6 @@ def navigate_results_page_return():
   driver.switch_to.window(driver.window_handles[0])
 
 
-#########################################
-#########################################
-
-# ##### OLD; BUT MAY REIMPLEMENT. WE'LL SEE
-
-
-# RUNS THE CYCLE OF OPENING, SCRAPING, AND NAVIGATING BACK TO THE ORIGINAL PLACE
-# def race_cycle(race):
-#   race = race
-#   time.sleep(2)
-#   open_new_tab()
-#   time.sleep(2)
-#   navigate_new_tab()
-#   time.sleep(2)
-#   load_race_url(race)
-#   time.sleep(8)
-#   scrape()
-#   time.sleep(2)
-#   navigate_results_page_return()
 
 #########################################
 #########################################
@@ -264,32 +325,50 @@ def cycle_individual_results_list():
     time.sleep(2)
     load_race_url(race)
     time.sleep(8)
-    scrape()
+    raw_results = scrape()
     time.sleep(8)
+    return raw_results
     print('cycle completed')
     
-cycle_individual_results_list()
+
+
+##########3###############################
+#########################################
+
+def run_scrape():
+  get_meet()
+  time.sleep(1)
+  navigate_to_results()
+  time.sleep(1)
+  find_results_table()
+  time.sleep(1)
+  raw_results = cycle_individual_results_list()
+  driver.close()
+  return raw_results
 
 #########################################
 #########################################
 
-driver.close()
+def run_clean(raw_results):
+  print('results received to clean')
+  print(raw_results)
 
 #########################################
 #########################################
 
-
-
-#########################################
-#########################################
-
-
+def run_to_csv():
+  print('tbd')
 
 #########################################
 #########################################
 
-
-
+def run_program():
+  raw_results = run_scrape()
+  run_clean(raw_results)
+  run_to_csv()
 
 #########################################
 #########################################
+
+run_program()
+
