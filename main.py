@@ -161,7 +161,7 @@ def scrape_athlete_and_school():
 def scrape_athlete_time():
   athlete_times = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td/span")
   for athlete in athlete_times:
-    time.sleep(0.2)
+    time.sleep(0.4)
     print(athlete.text)
   return athlete_times
 
@@ -172,7 +172,7 @@ def scrape_td_elements():
   raw_results = []
   td_elements = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td")
   for td in td_elements:
-    time.sleep(0.5)
+    time.sleep(0.1)
     raw_results.append(td.get_attribute('data-text'))
     raw_results.append(td.text)
   return raw_results
@@ -224,17 +224,24 @@ def select_raw_list(raw_results):
 
 def remove_nones_and_empties(raw_list):
   raw_list = raw_list
+  just_data = []
   for i in raw_list:
     time.sleep(.2)
     if i == "":
       raw_list.remove(i)
       print('blank found')
+    elif i == None:
+      raw_list.remove(i)
+      print('None found')
     elif i == "None":
       raw_list.remove(i)
       print('None found')
+    elif i == ' ':
+      raw_list.remove(i)
     else:
+      just_data.append(i)
       print('its chill')
-  print()
+  print(just_data)
 
 
 #########################################
