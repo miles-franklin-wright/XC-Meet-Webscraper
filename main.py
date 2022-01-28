@@ -144,26 +144,6 @@ def scrape_race_length_gender():
   return combined_race_lenth_gender
 
 
-#########################################
-#########################################
-
-def scrape_athlete_and_school():
-  combined_athlete_school = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td/a")
-  for athlete in combined_athlete_school:
-    time.sleep(0.2)
-    print(athlete.text)
-  return combined_athlete_school
-
-
-#########################################
-#########################################
-
-def scrape_athlete_time():
-  athlete_times = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td/span")
-  for athlete in athlete_times:
-    time.sleep(0.4)
-    print(athlete.text)
-  return athlete_times
 
 #########################################
 #########################################
@@ -210,9 +190,9 @@ def scrape_header():
 
 def select_raw_list(raw_results):
   raw_results = raw_results
-  print(raw_results[1])
+  print(raw_results)
   print('list selected')
-  raw_list = raw_results[1]
+  raw_list = raw_results
   return raw_list
 
 
@@ -228,33 +208,91 @@ def remove_nones_and_empties(raw_list):
   for i in raw_list:
     time.sleep(.2)
     if i == "":
-      raw_list.remove(i)
       print('blank found')
     elif i == None:
-      raw_list.remove(i)
       print('None found')
     elif i == "None":
-      raw_list.remove(i)
       print('None found')
     elif i == ' ':
-      raw_list.remove(i)
+      print('blank found')
     else:
       just_data.append(i)
       print('its chill')
   print(just_data)
+  return just_data
 
 
 #########################################
 #########################################
 
+def split_list_to_athlete(just_data):
+  just_data = just_data
+  split_by_athletes = []
+  # 6 DATA POINTS
+  n = 6
+  # ADD THE 6 DATA POINTS TO NEW SUBLIST
+  split_by_athletes = [just_data[i * n:(i + 1) * n] for i in range((len(just_data) + n - 1) // n )] 
+  print (split_by_athletes)
+  return split_by_athletes
 
+#########################################
+#########################################
 
+def remove_teamscore_data(athlete_with_teamscore):
+  athlete_with_teamscore = athlete_with_teamscore
+  just_athlete_data = []
+  for i in athlete_with_teamscore:
+    time.sleep(.1)
+    if len(i[0]) > 3:
+      print(i)
+      print('team found')
+    elif len(i[2]) > 2:
+      print(i)
+      print('team found')
+    elif len(i[4]) > 8:
+      print(i)
+      print('team found')
+    elif len(i[5]) > 3:
+      print(i)
+      print('team found')
+    else: 
+      just_athlete_data.append(i)
+
+#########################################
+#########################################
 
 
 
 #########################################
 #########################################
 # end cleaning component functions
+#########################################
+#########################################
+
+#########################################
+#########################################
+# begin combining function
+#########################################
+#########################################
+
+def combine_header_and_cleaned(header_results, cleaned_results):
+  header_results = header_results
+  cleaned_results = cleaned_results
+  print(header_results)
+  # final_data = []
+  # for item in cleaned_results:
+  #   for i in header_results:
+  #     item.append(i)
+  #   final_data.append[item]
+  # return final_data
+    
+  
+  
+
+
+#########################################
+#########################################
+# end combining function
 #########################################
 #########################################
 
@@ -268,9 +306,14 @@ def clean(raw_results):
   time.sleep(.5)
   raw_list = select_raw_list(raw_results)
   time.sleep(.5)
-  cleaned_list = remove_nones_and_empties(raw_list)
-  print(cleaned_list)
-  print('done cleaning for now')
+  just_data = remove_nones_and_empties(raw_list)
+  time.sleep(.5)
+  athlete_with_teamscore = split_list_to_athlete(just_data)
+  time.sleep(.5)
+  just_athlete_data = remove_teamscore_data(athlete_with_teamscore)
+  time.sleep(.5)
+  print(just_athlete_data)
+  return just_athlete_data
 
 
 
@@ -279,9 +322,10 @@ def clean(raw_results):
 
 
 # PRIMARY SCRAPING FUNCTION
-def scrape():
+def perform_program():
+  header_results = []
   raw_results = []
-  raw_results.append(scrape_header())
+  header_results.append(scrape_header())
   time.sleep(5)
   raw_results.append(scrape_td_elements())
   time.sleep(2)
@@ -289,7 +333,11 @@ def scrape():
   time.sleep(2)
   print('RACE SCRAPED')
   time.sleep(2)
-  clean(raw_results)
+  cleaned_results = clean(raw_results)
+  time.sleep(2)
+  final_data = combine_header_and_cleaned(header_results, cleaned_results)
+  time.sleep(2)
+  print(final_data)
   time.sleep(10)
   close_race_url()
   time.sleep(5)
@@ -332,10 +380,10 @@ def cycle_individual_results_list():
     time.sleep(2)
     load_race_url(race)
     time.sleep(8)
-    raw_results = scrape()
+    perform_program()
     time.sleep(8)
-    return raw_results
     print('cycle completed')
+    
     
 
 
@@ -349,30 +397,27 @@ def run_scrape():
   time.sleep(1)
   find_results_table()
   time.sleep(1)
-  raw_results = cycle_individual_results_list()
+  cycle_individual_results_list()
   driver.close()
-  return raw_results
+
 
 #########################################
 #########################################
 
-def run_clean(raw_results):
-  print('results received to clean')
-  print(raw_results)
+
+
 
 #########################################
 #########################################
 
-def run_to_csv():
-  print('tbd')
+
 
 #########################################
 #########################################
 
 def run_program():
-  raw_results = run_scrape()
-  run_clean(raw_results)
-  run_to_csv()
+  run_scrape()
+
 
 #########################################
 #########################################
