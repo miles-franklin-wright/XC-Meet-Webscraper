@@ -125,7 +125,7 @@ def scrape_meet_name():
 def scrape_meet_date():
   meet_date = driver.find_element(By.XPATH, "//div[@class='date']/time")
   print(meet_date.text)
-  return meet_date
+  return meet_date.text
 
 #########################################
 #########################################
@@ -133,7 +133,7 @@ def scrape_meet_date():
 def scrape_meet_location():
   meet_location = driver.find_element(By.XPATH, "//div[@class='venueName']/a")
   print(meet_location.text)
-  return meet_location
+  return meet_location.text
 
 #########################################
 #########################################
@@ -141,7 +141,7 @@ def scrape_meet_location():
 def scrape_race_length_gender():
   combined_race_lenth_gender = driver.find_element(By.XPATH, "//div[@id='resultsList']/table/thead/tr/th/a")
   print(combined_race_lenth_gender.text)
-  return combined_race_lenth_gender
+  return combined_race_lenth_gender.text
 
 
 
@@ -152,7 +152,7 @@ def scrape_td_elements():
   raw_results = []
   td_elements = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td")
   for td in td_elements:
-    time.sleep(0.1)
+    time.sleep(0.05)
     raw_results.append(td.get_attribute('data-text'))
     raw_results.append(td.text)
   return raw_results
@@ -162,16 +162,21 @@ def scrape_td_elements():
 #########################################
 
 def scrape_header():
+  header_elements = []
   time.sleep(3)
-  scrape_meet_name()
+  meet_name = scrape_meet_name()
+  header_elements.append(meet_name)
   time.sleep(3)
-  scrape_meet_date()
+  meet_date = scrape_meet_date()
+  header_elements.append(meet_date)
   time.sleep(3)
-  scrape_meet_location()
+  meet_location = scrape_meet_location()
+  header_elements.append(meet_location)
   time.sleep(3)
-  scrape_race_length_gender()
+  meet_race_length_gender = scrape_race_length_gender()
+  header_elements.append(meet_race_length_gender)
   time.sleep(3)
-
+  return header_elements
 
 
 #########################################
@@ -190,9 +195,8 @@ def scrape_header():
 
 def select_raw_list(raw_results):
   raw_results = raw_results
-  print(raw_results)
-  print('list selected')
-  raw_list = raw_results
+  raw_list = raw_results[0]
+  print('selected element 0 of raw results; raw list:', raw_list)
   return raw_list
 
 
@@ -206,7 +210,7 @@ def remove_nones_and_empties(raw_list):
   raw_list = raw_list
   just_data = []
   for i in raw_list:
-    time.sleep(.2)
+    time.sleep(.05)
     if i == "":
       print('blank found')
     elif i == None:
@@ -257,6 +261,7 @@ def remove_teamscore_data(athlete_with_teamscore):
       print('team found')
     else: 
       just_athlete_data.append(i)
+  return just_athlete_data
 
 #########################################
 #########################################
@@ -278,13 +283,13 @@ def remove_teamscore_data(athlete_with_teamscore):
 def combine_header_and_cleaned(header_results, cleaned_results):
   header_results = header_results
   cleaned_results = cleaned_results
-  print(header_results)
-  # final_data = []
-  # for item in cleaned_results:
-  #   for i in header_results:
-  #     item.append(i)
-  #   final_data.append[item]
-  # return final_data
+  print('header and cleaned results:', header_results, cleaned_results)
+  final_data = []
+  for item in cleaned_results:
+    for i in header_results:
+      item.append(i)
+    final_data.append(item)
+  return final_data
     
   
   
@@ -312,7 +317,7 @@ def clean(raw_results):
   time.sleep(.5)
   just_athlete_data = remove_teamscore_data(athlete_with_teamscore)
   time.sleep(.5)
-  print(just_athlete_data)
+  print('just athlete data:', just_athlete_data)
   return just_athlete_data
 
 
@@ -326,10 +331,10 @@ def perform_program():
   header_results = []
   raw_results = []
   header_results.append(scrape_header())
+  print('header results:', header_results)
   time.sleep(5)
   raw_results.append(scrape_td_elements())
-  time.sleep(2)
-  print(raw_results)
+  print('raw results:', raw_results)
   time.sleep(2)
   print('RACE SCRAPED')
   time.sleep(2)
@@ -337,13 +342,12 @@ def perform_program():
   time.sleep(2)
   final_data = combine_header_and_cleaned(header_results, cleaned_results)
   time.sleep(2)
-  print(final_data)
+  print('final data:', final_data)
   time.sleep(10)
   close_race_url()
   time.sleep(5)
   navigate_results_page_return()
   time.sleep(5)
-  return raw_results
 
 #########################################
 #########################################
