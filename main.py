@@ -1,3 +1,10 @@
+# CSV SETUP
+import csv
+
+
+########################################
+########################################
+
 # SELENIUM SETUP
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -19,6 +26,8 @@ from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-hsm-usage')
+
+
 
 ########################################
 ########################################
@@ -64,15 +73,6 @@ def navigate_to_results():
   results_url = create_results_url()
   driver.get(str(results_url))
 
-
-
-#########################################
-#########################################
-
-# FIND RESULTS TABLE TO NAVIGATE TO INDIVIDUAL RESULTS LINKS
-def find_results_table():
-  results_table_element = driver.find_element(By.CLASS_NAME, 'meetResultsList')
-  print(results_table_element.get_attribute('class'))
 
 
 #########################################
@@ -143,7 +143,22 @@ def scrape_race_length_gender():
   print(combined_race_lenth_gender.text)
   return combined_race_lenth_gender.text
 
+#########################################
+#########################################
 
+def scrape_gender():
+  combined = scrape_race_length_gender()
+  gender = combined[0:5]
+  return gender
+  
+#########################################
+#########################################
+
+def scrape_race_length():
+  combined = scrape_race_length_gender()
+  race_length = combined[5:9]
+  return race_length
+  
 
 #########################################
 #########################################
@@ -152,7 +167,7 @@ def scrape_td_elements():
   raw_results = []
   td_elements = driver.find_elements(By.XPATH, "//div[@id='resultsList']/table/tbody/tr/td")
   for td in td_elements:
-    time.sleep(0.05)
+    time.sleep(0.1)
     raw_results.append(td.get_attribute('data-text'))
     raw_results.append(td.text)
   return raw_results
@@ -173,8 +188,11 @@ def scrape_header():
   meet_location = scrape_meet_location()
   header_elements.append(meet_location)
   time.sleep(3)
-  meet_race_length_gender = scrape_race_length_gender()
-  header_elements.append(meet_race_length_gender)
+  gender = scrape_gender()
+  header_elements.append(gender)
+  time.sleep(3)
+  race_length = scrape_race_length()
+  header_elements.append(race_length)
   time.sleep(3)
   return header_elements
 
@@ -210,7 +228,7 @@ def remove_nones_and_empties(raw_list):
   raw_list = raw_list
   just_data = []
   for i in raw_list:
-    time.sleep(.05)
+    time.sleep(.1)
     if i == "":
       print('blank found')
     elif i == None:
@@ -246,7 +264,7 @@ def remove_teamscore_data(athlete_with_teamscore):
   athlete_with_teamscore = athlete_with_teamscore
   just_athlete_data = []
   for i in athlete_with_teamscore:
-    time.sleep(.1)
+    time.sleep(.2)
     if len(i[0]) > 3:
       print(i)
       print('team found')
@@ -291,13 +309,32 @@ def combine_header_and_cleaned(header_results, cleaned_results):
     final_data.append(item)
   return final_data
     
-  
-  
-
 
 #########################################
 #########################################
 # end combining function
+#########################################
+#########################################
+
+
+
+#########################################
+#########################################
+# begin csv functions
+#########################################
+#########################################
+
+
+def main_csv_function(final_data):
+  final_data = final_data
+  with open('data.csv', 'w') as data:
+    writer = csv.writer(data)
+    writer.writerows(final_data)
+  print('rows written to csv')
+
+#########################################
+#########################################
+# end csv function
 #########################################
 #########################################
 
@@ -330,7 +367,7 @@ def clean(raw_results):
 def perform_program():
   header_results = []
   raw_results = []
-  header_results.append(scrape_header())
+  header_results = scrape_header()
   print('header results:', header_results)
   time.sleep(5)
   raw_results.append(scrape_td_elements())
@@ -344,10 +381,12 @@ def perform_program():
   time.sleep(2)
   print('final data:', final_data)
   time.sleep(10)
+  main_csv_function(final_data)
+  time.sleep(10)
   close_race_url()
-  time.sleep(5)
+  time.sleep(10)
   navigate_results_page_return()
-  time.sleep(5)
+  time.sleep(10)
 
 #########################################
 #########################################
@@ -371,7 +410,7 @@ def navigate_results_page_return():
 
 # CLICKS INTO EACH INDIVIDUAL MEET RESULT
 def cycle_individual_results_list():
-  time.sleep(3)
+  time.sleep(8)
   individual_results_list = find_individual_results_links()
   for i in individual_results_list:
     driver.implicitly_wait(10)
@@ -396,11 +435,9 @@ def cycle_individual_results_list():
 
 def run_scrape():
   get_meet()
-  time.sleep(1)
+  time.sleep(3)
   navigate_to_results()
-  time.sleep(1)
-  find_results_table()
-  time.sleep(1)
+  time.sleep(3)
   cycle_individual_results_list()
   driver.close()
 
