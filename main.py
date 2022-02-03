@@ -57,6 +57,18 @@ def get_meet():
 #########################################
 #########################################
 
+def get_meet_list():
+  meet_list = driver.find_elements(By.XPATH, "//ul[@class='meets']/li/a")
+  meet_list_hrefs = []
+  for i in meet_list:
+    time.sleep(2)
+    print(i.get_attribute('href'))
+    meet_list_hrefs.append(i.get_attribute('href'))
+  return meet_list_hrefs
+
+
+#########################################
+#########################################
 
 # CREATE RESULTS HREF TAG
 def create_results_url():
@@ -139,6 +151,7 @@ def scrape_meet_location():
 #########################################
 
 def scrape_race_length_gender():
+  time.sleep(2)
   combined_race_lenth_gender = driver.find_element(By.XPATH, "//div[@id='resultsList']/table/thead/tr/th/a")
   print(combined_race_lenth_gender.text)
   return combined_race_lenth_gender.text
@@ -436,6 +449,8 @@ def cycle_individual_results_list():
 def run_scrape():
   get_meet()
   time.sleep(3)
+  get_meet_list()
+  time.sleep(3)
   navigate_to_results()
   time.sleep(3)
   cycle_individual_results_list()
@@ -457,6 +472,7 @@ def run_scrape():
 #########################################
 
 def run_program():
+  
   run_scrape()
 
 
