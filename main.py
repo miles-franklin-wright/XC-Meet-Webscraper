@@ -26,6 +26,7 @@ from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-hsm-usage')
+chrome_options.add_argument('--headless')
 
 
 
@@ -53,6 +54,7 @@ def enter_meet():
 def get_meet():
   url = enter_meet()
   driver.get(str(url))
+  return url
 
 #########################################
 #########################################
@@ -61,28 +63,53 @@ def get_meet_list():
   meet_list = driver.find_elements(By.XPATH, "//ul[@class='meets']/li/a")
   meet_list_hrefs = []
   for i in meet_list:
-    time.sleep(2)
-    print(i.get_attribute('href'))
+    time.sleep(.5)
+    print('added to raw', i.get_attribute('href'))
     meet_list_hrefs.append(i.get_attribute('href'))
   return meet_list_hrefs
 
+#########################################
+#########################################
+
+def clean_meet_list(url):
+  url = url
+  meet_list = []
+  meet_list.append(url)
+  raw_meet_list_hrefs = get_meet_list()
+  for meet in raw_meet_list_hrefs:
+    time.sleep(.3)
+    if url in meet:
+      print('no good', meet)
+    elif 'compare' in meet:
+      print('no good', meet)
+    else:
+      meet_list.append(meet)
+      print('added:', meet)
+  print('cleaned hrefs:', meet_list)
+  return meet_list
+  
+    
+
+#########################################
+#########################################
 
 #########################################
 #########################################
 
 # CREATE RESULTS HREF TAG
-def create_results_url():
-  url = enter_meet()
+def create_results_url(meet):
+  url = meet
   results_url = url + "/results"
-  print(results_url)
+  print('results:', results_url)
   return results_url
 
 #########################################
 #########################################
 
 # GO TO RESULTS
-def navigate_to_results():
-  results_url = create_results_url()
+def navigate_to_results(meet):
+  meet = meet
+  results_url = create_results_url(meet)
   driver.get(str(results_url))
 
 
@@ -101,6 +128,7 @@ def find_individual_results_links():
 
 # OPENS NEW TAB FOR SCRAPING
 def open_new_tab():
+  time.sleep(.5)
   driver.execute_script("window.open('');")
 
 #########################################
@@ -108,6 +136,7 @@ def open_new_tab():
 
 # NAVIGATES TO NEW TAB 
 def navigate_new_tab():
+  time.sleep(.5)
   driver.switch_to.window(driver.window_handles[1])
 
 #########################################
@@ -115,6 +144,7 @@ def navigate_new_tab():
 
 # LOADS RACE URL INTO NEW WINDOW
 def load_race_url(race):
+  time.sleep(.5)
   race = race
   driver.get(str(race))
 
@@ -169,7 +199,7 @@ def scrape_gender():
 
 def scrape_race_length():
   combined = scrape_race_length_gender()
-  race_length = combined[5:9]
+  race_length = combined[5:10]
   return race_length
   
 
@@ -191,22 +221,22 @@ def scrape_td_elements():
 
 def scrape_header():
   header_elements = []
-  time.sleep(3)
+  time.sleep(2)
   meet_name = scrape_meet_name()
   header_elements.append(meet_name)
-  time.sleep(3)
+  time.sleep(2)
   meet_date = scrape_meet_date()
   header_elements.append(meet_date)
-  time.sleep(3)
+  time.sleep(2)
   meet_location = scrape_meet_location()
   header_elements.append(meet_location)
-  time.sleep(3)
+  time.sleep(2)
   gender = scrape_gender()
   header_elements.append(gender)
-  time.sleep(3)
+  time.sleep(2)
   race_length = scrape_race_length()
   header_elements.append(race_length)
-  time.sleep(3)
+  time.sleep(2)
   return header_elements
 
 
@@ -277,7 +307,7 @@ def remove_teamscore_data(athlete_with_teamscore):
   athlete_with_teamscore = athlete_with_teamscore
   just_athlete_data = []
   for i in athlete_with_teamscore:
-    time.sleep(.2)
+    time.sleep(.1)
     if len(i[0]) > 3:
       print(i)
       print('team found')
@@ -317,7 +347,9 @@ def combine_header_and_cleaned(header_results, cleaned_results):
   print('header and cleaned results:', header_results, cleaned_results)
   final_data = []
   for item in cleaned_results:
+    time.sleep(.1)
     for i in header_results:
+      time.sleep(.05)
       item.append(i)
     final_data.append(item)
   return final_data
@@ -338,9 +370,10 @@ def combine_header_and_cleaned(header_results, cleaned_results):
 #########################################
 
 
-def main_csv_function(final_data):
+def main_csv_function(final_data, count):
   final_data = final_data
-  with open('data.csv', 'w') as data:
+  count = count
+  with open('data.csv', 'a')  as data:
     writer = csv.writer(data)
     writer.writerows(final_data)
   print('rows written to csv')
@@ -377,7 +410,8 @@ def clean(raw_results):
 
 
 # PRIMARY SCRAPING FUNCTION
-def perform_program():
+def perform_program(count):
+  count = count
   header_results = []
   raw_results = []
   header_results = scrape_header()
@@ -394,7 +428,7 @@ def perform_program():
   time.sleep(2)
   print('final data:', final_data)
   time.sleep(10)
-  main_csv_function(final_data)
+  main_csv_function(final_data, count)
   time.sleep(10)
   close_race_url()
   time.sleep(10)
@@ -422,7 +456,8 @@ def navigate_results_page_return():
 #########################################
 
 # CLICKS INTO EACH INDIVIDUAL MEET RESULT
-def cycle_individual_results_list():
+def cycle_individual_results_list(count):
+  count = count
   time.sleep(8)
   individual_results_list = find_individual_results_links()
   for i in individual_results_list:
@@ -436,7 +471,7 @@ def cycle_individual_results_list():
     time.sleep(2)
     load_race_url(race)
     time.sleep(8)
-    perform_program()
+    perform_program(count)
     time.sleep(8)
     print('cycle completed')
     
@@ -447,13 +482,16 @@ def cycle_individual_results_list():
 #########################################
 
 def run_scrape():
-  get_meet()
+  count = 0
+  url = get_meet()
   time.sleep(3)
-  get_meet_list()
-  time.sleep(3)
-  navigate_to_results()
-  time.sleep(3)
-  cycle_individual_results_list()
+  meet_list = clean_meet_list(url)
+  for meet in meet_list:
+    time.sleep(3)
+    navigate_to_results(meet)
+    time.sleep(3)
+    count += 1
+    cycle_individual_results_list(count)
   driver.close()
 
 
