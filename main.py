@@ -492,7 +492,7 @@ def run_scrape():
     time.sleep(3)
     count += 1
     cycle_individual_results_list(count)
-  driver.close()
+  driver.quit()
 
 
 #########################################
