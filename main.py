@@ -1,5 +1,6 @@
 # CSV SETUP
 import csv
+from race_urls import race_urls
 
 # https://nj.milesplit.com/meets/446320-njsiaa-xc-meet-of-champions-2021
 
@@ -502,10 +503,11 @@ def return_meets():
 #########################################
 
 def run_program():
-  meet_list = []
-  meet_list = return_meets()
-  for meet in meet_list:
-    run_scrape(meet)
+  # meet_list = []
+  # meet_list = return_meets()
+  # for meet in meet_list:
+  #   run_scrape(meet)
+  race_urls()
 
 
 #########################################
