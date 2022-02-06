@@ -1,6 +1,7 @@
 # CSV SETUP
 import csv
 
+# https://nj.milesplit.com/meets/446320-njsiaa-xc-meet-of-champions-2021
 
 ########################################
 ########################################
@@ -27,6 +28,7 @@ chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-hsm-usage')
 chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
 
 
 
@@ -51,10 +53,18 @@ def enter_meet():
 #########################################
 
 # GET MEET
-def get_meet():
+def get_initial_meet():
   url = enter_meet()
   driver.get(str(url))
   return url
+
+#########################################
+#########################################
+
+def get_individual_meet(meet):
+  meet = meet
+  driver.get(meet)
+  return meet
 
 #########################################
 #########################################
@@ -370,9 +380,8 @@ def combine_header_and_cleaned(header_results, cleaned_results):
 #########################################
 
 
-def main_csv_function(final_data, count):
+def main_csv_function(final_data):
   final_data = final_data
-  count = count
   with open('data.csv', 'a')  as data:
     writer = csv.writer(data)
     writer.writerows(final_data)
@@ -410,8 +419,7 @@ def clean(raw_results):
 
 
 # PRIMARY SCRAPING FUNCTION
-def perform_program(count):
-  count = count
+def perform_program():
   header_results = []
   raw_results = []
   header_results = scrape_header()
@@ -428,27 +436,13 @@ def perform_program(count):
   time.sleep(2)
   print('final data:', final_data)
   time.sleep(10)
-  main_csv_function(final_data, count)
+  main_csv_function(final_data)
   time.sleep(10)
-  close_race_url()
+  # driver.close()
   time.sleep(10)
-  navigate_results_page_return()
-  time.sleep(10)
-
-#########################################
-#########################################
-
-# CLOSES INDIVIDUAL RACE URL
-def close_race_url():
-  driver.close()
-
-#########################################
-#########################################
-
-
-# SWITCHES TO OLD (RESULT PAGE) URL
-def navigate_results_page_return():
   driver.switch_to.window(driver.window_handles[0])
+  time.sleep(10)
+
 
 
 
@@ -456,8 +450,7 @@ def navigate_results_page_return():
 #########################################
 
 # CLICKS INTO EACH INDIVIDUAL MEET RESULT
-def cycle_individual_results_list(count):
-  count = count
+def cycle_individual_results_list():
   time.sleep(8)
   individual_results_list = find_individual_results_links()
   for i in individual_results_list:
@@ -471,34 +464,33 @@ def cycle_individual_results_list(count):
     time.sleep(2)
     load_race_url(race)
     time.sleep(8)
-    perform_program(count)
+    perform_program()
     time.sleep(8)
     print('cycle completed')
     
     
 
 
-##########3###############################
+#########################################
 #########################################
 
-def run_scrape():
-  count = 0
-  url = get_meet()
+def run_scrape(meet):
+  meet = meet
+  url = get_individual_meet(meet)
   time.sleep(3)
+  navigate_to_results(url)
+  time.sleep(3)
+  cycle_individual_results_list()
+
+
+#########################################
+#########################################
+
+def return_meets():
+  url = get_initial_meet()
+  time.sleep(.5)
   meet_list = clean_meet_list(url)
-  for meet in meet_list:
-    time.sleep(3)
-    navigate_to_results(meet)
-    time.sleep(3)
-    count += 1
-    cycle_individual_results_list(count)
-  driver.quit()
-
-
-#########################################
-#########################################
-
-
+  return meet_list
 
 
 #########################################
@@ -510,8 +502,10 @@ def run_scrape():
 #########################################
 
 def run_program():
-  
-  run_scrape()
+  meet_list = []
+  meet_list = return_meets()
+  for meet in meet_list:
+    run_scrape(meet)
 
 
 #########################################
