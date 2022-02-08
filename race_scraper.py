@@ -4,12 +4,14 @@ import time
 # SELENIUM SETUP
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-hsm-usage')
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--disable-gpu')
+from pre_race_scraper import pre_scraper
 
 # DECLARE DRIVER
 driver = webdriver.Chrome(options=chrome_options)
@@ -35,7 +37,6 @@ def load_race_urls_csv():
     csv_urls = csv.reader(urls_from_csv)
     print('checking race urls:')
     for race in csv_urls:
-      print(race)
       race_urls.append(race)
   return race_urls
 
@@ -46,9 +47,14 @@ def cycle_races(race_urls):
   for race in race_urls:
     driver.implicitly_wait(3)
     load_race_url(race)
+    print(race)
     time.sleep(8)
-    perform_program(race)
+    final_data = check_format()
     time.sleep(8)
+    can_remove = main_csv_function(final_data)
+    time.sleep(1)
+    remove_race_url_from_csv(can_remove, race)
+    time.sleep(2)
     print('cycle completed')
 
 # LOADS RACE IN DRIVER
@@ -58,8 +64,7 @@ def load_race_url(race):
   driver.get(race)
 
 # SCRAPES RACE AND REMOVES RACE FROM RACE_URLS_CSV  
-def perform_program(race):
-  race = race
+def perform_program():
   header_results = []
   raw_results = []
   header_results = scrape_header()
@@ -76,10 +81,8 @@ def perform_program(race):
   time.sleep(2)
   print('final data:', final_data)
   time.sleep(2)
-  can_remove = main_csv_function(final_data)
-  time.sleep(1)
-  remove_race_url_from_csv(can_remove, race)
-  time.sleep(2)
+  return final_data
+
 
 # CLEANS RAW DATA
 def clean(raw_results):
@@ -257,3 +260,15 @@ def remove_teamscore_data(athlete_with_teamscore):
     else: 
       just_athlete_data.append(i)
   return just_athlete_data
+
+# CHECKS WHICH FORMAT THE DATA IS IN
+def check_format():
+  final_data = None
+  try:
+    check = driver.find_element(By.XPATH, "//div[@id='meetResultsBody']/pre")
+    if check.text != '':
+      final_data = pre_scraper()
+  except NoSuchElementException:
+    print('go to formatted')
+    final_data = perform_program()
+  return final_data

@@ -4,38 +4,38 @@
       {
         "id": "c01178c6-d9c4-4d08-b9c4-79f24ba87455",
         "line": 1,
-        "version": 18359,
+        "version": 18529,
         "index": 0
       },
       {
         "id": "0b096ced-3b21-444b-a020-50a4074885d9",
         "line": 1,
-        "version": 18359,
+        "version": 18529,
         "index": 0
       },
       {
         "id": "b42149dc-e091-49b9-8dc6-296e5f06263f",
         "line": 1,
-        "version": 18359,
+        "version": 18529,
         "index": 0
       },
       {
         "id": "d6792684-4926-4f01-a5f1-c2fcfeee3e76",
-        "line": 41,
-        "version": 18359,
-        "index": 1001
+        "line": 43,
+        "version": 18529,
+        "index": 1085
       },
       {
         "id": "f97dd017-426d-4c49-9a22-19db38a3dd2d",
-        "line": 65,
-        "version": 18359,
-        "index": 2255
+        "line": 68,
+        "version": 18529,
+        "index": 2382
       },
       {
         "id": "94ac7e75-e813-42ec-8381-e612c23bdc50",
-        "line": 65,
-        "version": 18359,
-        "index": 2386
+        "line": 68,
+        "version": 18529,
+        "index": 2513
       }
     ],
     "notepad.py": [
@@ -46,59 +46,67 @@
         "index": 82
       }
     ],
+    "pre_race_scraper.py": [
+      {
+        "id": "ce350f99-db6c-4b24-bd00-2f9586259b3e",
+        "line": 62,
+        "version": 5354,
+        "index": 1717
+      }
+    ],
     "race_scraper.py": [
       {
         "id": "37d4a6eb-e2f6-41dd-b8fe-b47a8d29f2d0",
         "line": 140,
-        "version": 2346,
+        "version": 2600,
         "index": 3927
       },
       {
         "id": "2e299059-8c3f-4f7f-a9f2-03dfefde3fff",
         "line": 140,
-        "version": 2346,
+        "version": 2600,
         "index": 3927
       },
       {
         "id": "04d513f5-c27e-45e8-9fed-9c8bb48f8338",
         "line": 146,
-        "version": 2346,
+        "version": 2600,
         "index": 4095
       },
       {
         "id": "5af39010-7ff1-4c94-9238-329defb7e9e7",
         "line": 149,
-        "version": 2346,
+        "version": 2600,
         "index": 4209
       },
       {
         "id": "9ac45fca-0562-462c-9c27-602329d46323",
         "line": 149,
-        "version": 2346,
+        "version": 2600,
         "index": 4209
       },
       {
         "id": "a993989a-4808-4481-80da-86e9dc555cbb",
         "line": 149,
-        "version": 2346,
+        "version": 2600,
         "index": 4209
       },
       {
         "id": "bf0fbb97-c061-4d7f-9c6a-50eb1293014a",
         "line": 152,
-        "version": 2346,
+        "version": 2600,
         "index": 4292
       },
       {
         "id": "ab59d703-cdbd-4e15-9e0b-80418ad502d2",
         "line": 162,
-        "version": 2346,
+        "version": 2600,
         "index": 4637
       },
       {
         "id": "f8ef82df-4464-4e27-9db2-71d38091c49b",
         "line": 162,
-        "version": 2346,
+        "version": 2600,
         "index": 4637
       }
     ],
