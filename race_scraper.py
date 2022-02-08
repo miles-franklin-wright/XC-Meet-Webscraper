@@ -111,16 +111,12 @@ def main_csv_function(final_data):
 def remove_race_url_from_csv(success, race):
   race = race
   success = success
-  if success == True:
-    with open('race_urls_csv.csv', 'rb') as unedited, open('race_urls_csv.csv', 'wb') as edited:
-        writer = csv.writer(edited)
-        for row in csv.reader(unedited):
-          if row == race:
-              writer.writerow(row[0])
-          else:
-            None
-  else:
-    print('row not removed')
+  with open('race_urls_csv.csv', 'rb') as unedited, open('race_urls_csv.csv', 'wb') as edited:
+      writer = csv.writer(edited)
+      next(unedited)
+      for row in unedited:
+        unedited.write(row)
+  
 
 # COMBINES THE HEADER RESULTS AND CLEANED BODY RESULTS
 def combine_header_and_cleaned(header_results, cleaned_results):

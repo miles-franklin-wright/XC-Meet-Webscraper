@@ -2,6 +2,7 @@
 import csv
 from race_urls import race_urls
 from race_scraper import scraper
+from pre_race_scraper import pre_scraper
 
 # https://nj.milesplit.com/meets/446320-njsiaa-xc-meet-of-champions-2021
 
@@ -44,19 +45,20 @@ driver = webdriver.Chrome(options=chrome_options)
 #########################################
 
 def run_program():
-  print('Do you want to obtain the intial urls?')
-  run_race_urls = input('Enter Y/N')
-  if run_race_urls == "Y":
-    race_urls()
-  else:
-    print('moving on')
-  time.sleep(2)
-  print('Do you want to run the main scraper?')
-  run_scraper = input('Enter Y/N')
-  if run_scraper == "Y":
-    scraper()
-  else:
-    print('ending program')
+  # print('Do you want to obtain the intial urls?')
+  # run_race_urls = input('Enter Y/N')
+  # if run_race_urls == "Y":
+  #   race_urls()
+  # else:
+  #   print('moving on')
+  # time.sleep(2)
+  # print('Do you want to run the main scraper?')
+  # run_scraper = input('Enter Y/N')
+  # if run_scraper == "Y":
+  #   scraper()
+  # else:
+  #   print('ending program')
+  pre_scraper()
 
 
 #########################################
