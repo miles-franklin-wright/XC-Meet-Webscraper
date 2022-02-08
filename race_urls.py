@@ -119,6 +119,3 @@ def urls_to_csv(urls):
       time.sleep(.1)
       writer.writerow([url])
   print('rows written to csv')
-
-
-  race_urls()
