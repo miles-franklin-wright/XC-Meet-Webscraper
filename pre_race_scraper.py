@@ -19,8 +19,10 @@ driver = webdriver.Chrome(options=chrome_options)
 ############################################
 ############################################
 # MAIN FUNCTION
-def pre_scraper():
-  raw_pre_data = get_pre()
+def pre_scraper(pre_element):
+  pre_element = pre_element
+  print(pre_element)
+  raw_pre_data = pre_element
   full_data = clean_pre(raw_pre_data)
   return full_data
   print('pre scraped')
@@ -31,8 +33,11 @@ def pre_scraper():
 
 # LOGIC FOR GETTING THE PRE DATA
 def get_pre():
-  pre_data = driver.find_element(By.XPATH, "//div[@id='meetResultsBody']/pre")
-  return pre_data.text
+  pre_data = []
+  pre_data = driver.find_elements(By.NAME, 'pre')
+  print(len(pre_data))
+  return pre_data[0].text
+  
 
 # CYCLES PRE CLEANING FUNCTIONS
 def clean_pre(raw_pre_data):

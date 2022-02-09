@@ -42,14 +42,14 @@ def load_race_urls_csv():
 
 # CYCLES THROUGH EACH RACE IN RACE_URLS
 def cycle_races(race_urls):
-  time.sleep(8)
+  time.sleep(4)
   race_urls = race_urls
   for race in race_urls:
     driver.implicitly_wait(3)
     load_race_url(race)
     print(race)
     time.sleep(8)
-    final_data = check_format()
+    final_data = fork()
     time.sleep(8)
     can_remove = main_csv_function(final_data)
     time.sleep(1)
@@ -263,12 +263,33 @@ def remove_teamscore_data(athlete_with_teamscore):
 
 # CHECKS WHICH FORMAT THE DATA IS IN
 def check_format():
-  final_data = None
+  boolean = True
   try:
-    check = driver.find_element(By.XPATH, "//div[@id='meetResultsBody']/pre")
-    if check.text != '':
-      final_data = pre_scraper()
+    pres = driver.find_elements(By.NAME, 'pre')
+    if len(pres) > 0:
+      boolean = True
   except NoSuchElementException:
-    print('go to formatted')
+    boolean = False
+  return boolean
+  
+
+
+def locator():
+  pre_element = driver.find_element(By.XPATH, '//div[@id="meetResultsBody"]/pre')
+  print(pre_element.text)
+  return pre_element.text
+
+
+def fork():
+  fork = check_format()
+  pre_element = locator()
+  final_data = []
+  if fork == True:
+    print('go to pre scraper')
+    final_data = pre_scraper(pre_element)
+  elif fork == False:
+    print('go to formatted scraper')
     final_data = perform_program()
+  else:
+    print('other issue')
   return final_data
