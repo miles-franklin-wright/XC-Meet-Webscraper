@@ -114,7 +114,7 @@ def main_csv_function(final_data):
 def remove_race_url_from_csv(success, race):
   race = race
   success = success
-  with open('race_urls_csv.csv', 'wb') as edited:
+  with open('race_urls_csv.csv', 'r+') as edited:
       for row in edited:
         if row == race:
           edited.write(row)
@@ -276,9 +276,14 @@ def check_format():
 
 
 def locator():
-  pre_element = driver.find_element(By.XPATH, '//div[@id="meetResultsBody"]/pre')
-  print(pre_element.text)
-  return pre_element.text
+  pre_element = ''
+  try:
+    pre_element = driver.find_element(By.XPATH, '//div[@id="meetResultsBody"]/pre')
+    print(pre_element.text)
+    return pre_element.text
+  except NoSuchElementException:
+    pre_element = 'no pre'
+  return pre_element
 
 
 def fork(race):

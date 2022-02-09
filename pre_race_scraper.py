@@ -167,9 +167,27 @@ def raw_athlete_data(no_empties):
   no_empties = no_empties
   athletes = []
   for i in no_empties:
-    if len(i) ==79:
+    if len(i) == 79:
       athletes.append(i)
     elif len(i) == 74:
+      athletes.append(i)
+    elif len(i) == 75:
+      athletes.append(i)
+    elif len(i) == 76:
+      athletes.append(i)
+    elif len(i) == 77:
+      athletes.append(i)
+    elif len(i) == 78:
+      athletes.append(i)
+    elif len(i) == 73:
+      athletes.append(i)
+    elif len(i) == 73:
+      athletes.append(i)
+    elif len(i) == 72:
+      athletes.append(i)
+    elif len(i) == 71:
+      athletes.append(i)
+    elif len(i) == 80:
       athletes.append(i)
     else:
       None
