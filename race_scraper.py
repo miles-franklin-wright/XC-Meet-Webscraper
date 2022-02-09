@@ -49,7 +49,7 @@ def cycle_races(race_urls):
     load_race_url(race)
     print(race)
     time.sleep(8)
-    final_data = fork()
+    final_data = fork(race)
     time.sleep(8)
     can_remove = main_csv_function(final_data)
     time.sleep(1)
@@ -114,11 +114,12 @@ def main_csv_function(final_data):
 def remove_race_url_from_csv(success, race):
   race = race
   success = success
-  with open('race_urls_csv.csv', 'rb') as unedited, open('race_urls_csv.csv', 'wb') as edited:
-      writer = csv.writer(edited)
-      next(unedited)
-      for row in unedited:
-        unedited.write(row)
+  with open('race_urls_csv.csv', 'wb') as edited:
+      for row in edited:
+        if row == race:
+          edited.write(row)
+        else:
+          None
   
 
 # COMBINES THE HEADER RESULTS AND CLEANED BODY RESULTS
@@ -280,16 +281,18 @@ def locator():
   return pre_element.text
 
 
-def fork():
+def fork(race):
+  race = race
   fork = check_format()
   pre_element = locator()
   final_data = []
   if fork == True:
     print('go to pre scraper')
-    final_data = pre_scraper(pre_element)
+    final_data = pre_scraper(pre_element, race)
   elif fork == False:
     print('go to formatted scraper')
     final_data = perform_program()
   else:
     print('other issue')
+  print('final data in fork', final_data)
   return final_data

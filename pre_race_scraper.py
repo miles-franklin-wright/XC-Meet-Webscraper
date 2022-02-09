@@ -19,12 +19,15 @@ driver = webdriver.Chrome(options=chrome_options)
 ############################################
 ############################################
 # MAIN FUNCTION
-def pre_scraper(pre_element):
+def pre_scraper(pre_element, race):
+  race = race[0]
+  driver.get(race)
+  final_data = []
   pre_element = pre_element
   print(pre_element)
   raw_pre_data = pre_element
-  full_data = clean_pre(raw_pre_data)
-  return full_data
+  final_data = clean_pre(raw_pre_data)
+  return final_data
   print('pre scraped')
 
 ############################################
@@ -45,6 +48,7 @@ def clean_pre(raw_pre_data):
   split_line_pre_data = split_raw_to_lines(raw_pre_data)
   no_empties = remove_empties(split_line_pre_data)
   full_cleaned_data = main_cycle(no_empties)
+  print('full_cleaned_data: ', full_cleaned_data)
   return full_cleaned_data
 
 # SPLIT TEXT INTO LIST OF LINES
@@ -69,44 +73,103 @@ def remove_empties(split_line_pre_data):
 # CYCLES THROUGH AND ISOLATES RAW DATA, RUNS CLEANING FUNCTIONS ON THEM, RETURNS A SINGLE LIST TO BE SENT TO CSV
 def main_cycle(no_empties):
   no_empties = no_empties
-  event = raw_event(no_empties)
-  gender_and_length = raw_gender_and_length(no_empties)
-  date_and_place = raw_date_and_place(no_empties)
+  event = raw_event()
+  cleaned_date = raw_date()
+  location = raw_location()
+  race_length = length(no_empties)
+  race_gender = gender(no_empties)
   athlete_data = raw_athlete_data(no_empties)
-  cleaned_gender = clean_gender(gender_and_length)
-  cleaned_race_length = clean_race_length(gender_and_length)
-  cleaned_date = clean_date(date_and_place)
-  cleaned_place = clean_place(date_and_place)
   cleaned_athletes = clean_athlete_data(athlete_data)
-  combined_header_data = combine_header_data(event, cleaned_gender, cleaned_race_length, cleaned_date, cleaned_place)
+  combined_header_data = combine_header_data(event, race_gender, race_length, cleaned_date, location)
   full_cleaned_data = combined_header_and_data(combined_header_data, cleaned_athletes)
   for i in full_cleaned_data:
     print(i)
+  return full_cleaned_data
 
 # RETURNS EVENT
-def raw_event(no_empties):
-  no_empties = no_empties
-  event = no_empties[3]
+def raw_event():
+  meet_name = driver.find_element(By.XPATH, '//h1[@class="meetName"]')
+  print(meet_name.text)
+  event = meet_name.text
   return event
+
+# RETURNS DATE
+def raw_date():
+  meet_date = driver.find_element(By.XPATH, "//div[@class='date']/time")
+  print(meet_date.text)
+  meet_date = meet_date.text
+  return meet_date
+
+# RETURNS LOCATION
+def raw_location():
+  meet_location = driver.find_element(By.XPATH, "//div[@class='venueName']/a")
+  print(meet_location.text)
+  location = meet_location.text
+  return location
+
 
 # RETURNS GENDER AND LENGTH OF RACE
 def raw_gender_and_length(no_empties):
   no_empties = no_empties
-  gender_and_length = no_empties[6]
+  gender_and_length = ''
+  for line in no_empties:
+    if "Event" in line:
+      gender_and_length = line
+    else:
+      None
+  print(gender_and_length)
   return gender_and_length
 
-# RETURNS DATE AND PLACE OF RACE
-def raw_date_and_place(no_empties):
+# RETURN GENDER
+def gender(no_empties):
   no_empties = no_empties
-  date_and_place = no_empties[4]
-  return date_and_place
+  gender = ''
+  for line in no_empties:
+    if "Boys" in line:
+      gender = 'BOYS'
+    elif 'BOYS' in line:
+      gender = 'BOYS'
+    elif 'boys' in line:
+      gender = 'BOYS'
+    elif 'Girls' in line:
+      gender = 'GIRLS'
+    elif 'GIRLS' in line:
+      gender = 'GIRLS'
+    elif 'girls' in line:
+      gender = 'GIRLS'
+    else:
+      print('no gender')
+  return gender
+
+# RETURN GENDER
+def length(no_empties):
+  no_empties = no_empties
+  length = ''
+  for line in no_empties:
+    if "5k" in line:
+      length = '5000'
+    elif '5000' in line:
+      length = '5000'
+    elif '5000m' in line:
+      length = '5000'
+    elif '2 Mile' in line:
+      length = '3200'
+    elif '3200m' in line:
+      length = '3200'
+    else:
+      print('no length')
+  return length
+
 
 # RETURNS THE ATHLETE DATA OF THE RACE
+
 def raw_athlete_data(no_empties):
   no_empties = no_empties
   athletes = []
   for i in no_empties:
-    if len(i) == 79:
+    if len(i) ==79:
+      athletes.append(i)
+    elif len(i) == 74:
       athletes.append(i)
     else:
       None
@@ -124,17 +187,6 @@ def clean_race_length(gender_and_length):
   cleaned_length = gender_and_length[12:15]
   return cleaned_length
 
-# CLEANS DATE
-def clean_date(date_and_place):
-  date_and_place = date_and_place
-  cleaned_date = date_and_place[43:]
-  return cleaned_date
-
-# CLEANS PLACE
-def clean_place(date_and_place):
-  date_and_place = date_and_place
-  cleaned_place = date_and_place[:12]
-  return cleaned_place
   
 # CLEANS ATHLETE DATA 
 def clean_athlete_data(athlete_data):
