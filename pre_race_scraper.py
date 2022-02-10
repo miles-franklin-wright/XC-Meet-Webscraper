@@ -189,6 +189,12 @@ def raw_athlete_data(no_empties):
       athletes.append(i)
     elif len(i) == 80:
       athletes.append(i)
+    elif len(i) == 81:
+      athletes.append(i)
+    elif len(i) == 82:
+      athletes.append(i)
+    elif len(i) == 83:
+      athletes.append(i)
     else:
       None
   return athletes

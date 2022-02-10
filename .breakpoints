@@ -50,70 +50,70 @@
       {
         "id": "ce350f99-db6c-4b24-bd00-2f9586259b3e",
         "line": 71,
-        "version": 7200,
+        "version": 7251,
         "index": 1891
       }
     ],
     "race_scraper.py": [
       {
         "id": "37d4a6eb-e2f6-41dd-b8fe-b47a8d29f2d0",
-        "line": 142,
-        "version": 4345,
-        "index": 3956
+        "line": 144,
+        "version": 4450,
+        "index": 3992
       },
       {
         "id": "2e299059-8c3f-4f7f-a9f2-03dfefde3fff",
-        "line": 142,
-        "version": 4345,
-        "index": 3956
+        "line": 144,
+        "version": 4450,
+        "index": 3992
       },
       {
         "id": "04d513f5-c27e-45e8-9fed-9c8bb48f8338",
-        "line": 148,
-        "version": 4345,
-        "index": 4124
+        "line": 150,
+        "version": 4450,
+        "index": 4160
       },
       {
         "id": "5af39010-7ff1-4c94-9238-329defb7e9e7",
-        "line": 151,
-        "version": 4345,
-        "index": 4238
+        "line": 153,
+        "version": 4450,
+        "index": 4274
       },
       {
         "id": "9ac45fca-0562-462c-9c27-602329d46323",
-        "line": 151,
-        "version": 4345,
-        "index": 4238
+        "line": 153,
+        "version": 4450,
+        "index": 4274
       },
       {
         "id": "a993989a-4808-4481-80da-86e9dc555cbb",
-        "line": 151,
-        "version": 4345,
-        "index": 4238
+        "line": 153,
+        "version": 4450,
+        "index": 4274
       },
       {
         "id": "bf0fbb97-c061-4d7f-9c6a-50eb1293014a",
-        "line": 154,
-        "version": 4345,
-        "index": 4321
+        "line": 156,
+        "version": 4450,
+        "index": 4357
       },
       {
         "id": "ab59d703-cdbd-4e15-9e0b-80418ad502d2",
-        "line": 164,
-        "version": 4345,
-        "index": 4666
+        "line": 166,
+        "version": 4450,
+        "index": 4702
       },
       {
         "id": "f8ef82df-4464-4e27-9db2-71d38091c49b",
-        "line": 164,
-        "version": 4345,
-        "index": 4666
+        "line": 166,
+        "version": 4450,
+        "index": 4702
       },
       {
         "id": "a309e7a9-f3e6-40da-9ba9-a04979202060",
-        "line": 266,
-        "version": 4345,
-        "index": 7523
+        "line": 268,
+        "version": 4450,
+        "index": 7559
       }
     ],
     "race_urls.py": [
