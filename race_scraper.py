@@ -281,7 +281,6 @@ def locator():
     pre_element = driver.find_element(By.XPATH, '//div[@id="meetResultsBody"]/pre')
     print(pre_element.text)
     return pre_element.text
-    print(pre_element.text)
   except NoSuchElementException:
     pre_element = 'no pre'
   return pre_element
@@ -289,16 +288,13 @@ def locator():
 
 def fork(race):
   race = race
-  fork = check_format()
   pre_element = locator()
   final_data = []
-  if fork == True:
-    print('go to pre scraper')
-    final_data = pre_scraper(pre_element, race)
-  elif fork == False:
+  if pre_element == "no pre":
     print('go to formatted scraper')
     final_data = perform_program()
   else:
-    print('other issue')
+    print('go to pre scraper')
+    final_data = pre_scraper(pre_element, race)
   print('final data in fork', final_data)
   return final_data
