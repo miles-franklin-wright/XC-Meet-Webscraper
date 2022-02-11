@@ -1,4 +1,5 @@
 import time
+from athletes_for_pre_scraper import give_athletes
 
 # SELENIUM SETUP
 from selenium import webdriver
@@ -78,8 +79,9 @@ def main_cycle(no_empties):
   location = raw_location()
   race_length = length(no_empties)
   race_gender = gender(no_empties)
-  athlete_data = raw_athlete_data(no_empties)
-  cleaned_athletes = clean_athlete_data(athlete_data)
+  # athlete_data = raw_athlete_data(no_empties)
+  # cleaned_athletes = clean_athlete_data(athlete_data)
+  cleaned_athletes = give_athletes(no_empties)
   combined_header_data = combine_header_data(event, race_gender, race_length, cleaned_date, location)
   full_cleaned_data = combined_header_and_data(combined_header_data, cleaned_athletes)
   for i in full_cleaned_data:
@@ -139,6 +141,7 @@ def gender(no_empties):
       gender = 'GIRLS'
     else:
       print('no gender')
+  print(gender)
   return gender
 
 # RETURN GENDER
@@ -158,6 +161,7 @@ def length(no_empties):
       length = '3200'
     else:
       print('no length')
+  print(length)
   return length
 
 

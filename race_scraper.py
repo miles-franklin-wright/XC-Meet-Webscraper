@@ -281,6 +281,7 @@ def locator():
     pre_element = driver.find_element(By.XPATH, '//div[@id="meetResultsBody"]/pre')
     print(pre_element.text)
     return pre_element.text
+    print(pre_element.text)
   except NoSuchElementException:
     pre_element = 'no pre'
   return pre_element

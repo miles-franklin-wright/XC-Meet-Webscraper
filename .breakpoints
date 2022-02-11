@@ -49,9 +49,9 @@
     "pre_race_scraper.py": [
       {
         "id": "ce350f99-db6c-4b24-bd00-2f9586259b3e",
-        "line": 71,
-        "version": 7251,
-        "index": 1891
+        "line": 72,
+        "version": 7305,
+        "index": 1942
       }
     ],
     "race_scraper.py": [
@@ -122,6 +122,14 @@
         "line": 88,
         "version": 2143,
         "index": 2574
+      }
+    ],
+    "race_urls_csv.csv": [
+      {
+        "id": "ebd26fc8-1ec9-45a4-aba5-ee61c7f55010",
+        "line": 2,
+        "version": 51,
+        "index": 82
       }
     ],
     "return_tbcleaned_1142022.txt": [
