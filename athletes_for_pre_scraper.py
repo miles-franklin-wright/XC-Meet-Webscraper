@@ -53,6 +53,9 @@ def give_athletes(sample):
     for i in split:
       if "#" in i:
         split.remove(i)
+    for i[1] in split:
+      if is_number(i[1]) == True:
+        split.remove(i[1])
     print(split)
     if split == []:
       break
