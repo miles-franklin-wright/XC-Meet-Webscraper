@@ -1,6 +1,9 @@
+
+
+
 def give_just_athletes(uncleaned_list):
   raw = uncleaned_list
-  print('raw: ', raw)
+  print('print raw', raw)
   just_athletes = []
   beginning_index = 0
   end_index = 0
@@ -12,15 +15,38 @@ def give_just_athletes(uncleaned_list):
   for row in raw:
     if "Name" in row:
       beginning_index = raw.index(row) + 2
+    elif 'NAME' in row:
+      beginning_index = raw.index(row) + 2
+    elif 'TEAM SCORES' in row:
+      end_index = raw.index(row) - 1
     elif "Team Scores" in row:
       end_index = raw.index(row) - 1
     else: 
       None
-  for row in raw:
-    if raw.index(row) >= beginning_index and raw.index(row) <= end_index:
-      just_athletes.append(row)
-    else:
-      None
+  if end_index < beginning_index:
+    for row in raw:
+      if raw.index(row) >= beginning_index:
+        just_athletes.append(row)
+  else:
+    for row in raw:
+      if raw.index(row) >= beginning_index and raw.index(row) <= end_index:
+        just_athletes.append(row)
+      else:
+        None
+  for row in just_athletes:
+    print(len(row))
+    
+  # ONLY COMMENT IN IF JUST ATHLETES IS NOT UNIFORM
+  if len(just_athletes[-1]) < len(just_athletes[20]):
+    just_athletes.remove(just_athletes[-1])
+  # ONLY COMMENT IN IF STRANGE ERROR AT END
+  # fix = ''
+  # for row in just_athletes:
+  #   if len(row) < 30:
+  #     fix = row
+  # just_athletes.remove(just_athletes[-1])
+  # print(fix, just_athletes[-1])
+  # just_athletes[-1] = just_athletes[-1] + fix
   return just_athletes
 
 def is_number(string):
@@ -37,8 +63,6 @@ def give_athletes(sample):
   sample = sample
   just_athletes = give_just_athletes(sample)
   print('just athletes: ')
-  for row in just_athletes:
-    print(row)
   one_row_to_list = []
   for row in just_athletes:
     new_athlete = []
@@ -53,9 +77,8 @@ def give_athletes(sample):
     for i in split:
       if "#" in i:
         split.remove(i)
-    for i[1] in split:
-      if is_number(i[1]) == True:
-        split.remove(i[1])
+    if is_number(split[1]) == True:
+      split.remove(split[1])
     print(split)
     if split == []:
       break
